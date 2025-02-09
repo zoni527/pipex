@@ -36,10 +36,7 @@ SRC :=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c	ft_isascii.c	\
 	ft_longtoa.c	ft_hextoa.c	ft_utoa.c	ft_ulongtoa.c	\
 	ft_int_digits.c	ft_ulong_digits.c	ft_uint_digits.c	\
 	ft_ulong_digits.c	ft_ulong_hex_digits.c	\
-	free_ptr_return_int.c	\
-	free_null_ended_array.c	\
-	free_null_ended_array_return_null.c	\
-	free_null_ended_array_return_int.c	\
+	free_ptr_return_int.c	free_split.c	\
 	write_error_return_int.c	\
 	write_error_return_null.c	\
 	ft_printf.c	handle_c.c	handle_s.c	handle_p.c	\

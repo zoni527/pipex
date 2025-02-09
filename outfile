@@ -1,0 +1,9 @@
+total 72$
+-rw-r--r-- 1 root root  2885 Feb  9 10:54 Makefile$
+-rw-r--r-- 1 root root     4 Feb  9 21:39 infile$
+drwxr-xr-x 2 root root 12288 Feb  9 21:22 libft$
+drwxr-xr-x 2 root root  4096 Feb  9 22:00 obj$
+-rw-r--r-- 1 root root     0 Feb  9  2025 outfile$
+-rwxr-xr-x 1 root root 34640 Feb  9 22:00 pipex$
+-rw-r--r-- 1 root root  5381 Feb  9 22:00 pipex.c$
+-rw-r--r-- 1 root root  1437 Feb  9 21:54 pipex.h$

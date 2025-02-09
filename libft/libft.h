@@ -125,9 +125,7 @@ int				ft_ulong_digits(unsigned long n);
 int				ft_ulong_hex_digits(unsigned long n);
 
 int				free_ptr_return_int(void **ptr_to_ptr, int i);
-void			free_null_ended_array(void ***ptr_to_array);
-void			*free_null_ended_array_return_null(void ***ptr_to_array);
-int				free_null_ended_array_return_int(void ***ptr_to_array, int num);
+void			free_split(char ***words_ptr);
 int				write_error_return_int(char *error_message, int return_value);
 void			*write_error_return_null(char *error_message);
 
