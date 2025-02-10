@@ -13,14 +13,17 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# define E_PIPE		1
-# define E_FORK		2
-# define E_DUP2		3
-# define E_OPEN		4
-# define E_CLOSE	5
-# define E_EXEC		6
-# define E_MALLOC	7
-# define E_ACCESS	8
+# define E_PERMISSION	1
+# define E_PIPE			2
+# define E_FORK			3
+# define E_DUP2			4
+# define E_OPEN			5
+# define E_CLOSE		6
+# define E_EXEC			7
+# define E_MALLOC		8
+# define E_ACCESS		9
+# define E_NOPATH		10
+# define E_NOTFOUND		127
 
 # include "libft/libft.h"
 # include <stdio.h>

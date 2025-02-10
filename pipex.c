@@ -11,13 +11,17 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include "libft/libft.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 void	close_fds(t_ppx *data);
 void	cleanup_data(t_ppx *data);
-void	clean_perror_exit(t_ppx *data, const char *msg, int exit_code);
+void	perror_clean_exit(t_ppx *data, const char *msg, int exit_code);
 void	assign_bin(t_ppx *data, int index, const char *bin_name);
+
+void	append_slash_to_paths(t_ppx *d);
 
 void	cleanup_data(t_ppx *data)
 {
@@ -29,21 +33,38 @@ void	cleanup_data(t_ppx *data)
 
 void	close_fds(t_ppx *data)
 {
-	close(data->file_fd);
-	close(data->pipe_fds[0]);
-	close(data->pipe_fds[1]);
+	if (data->file_fd > 2)
+		close(data->file_fd);
+	if (data->pipe_fds[0] > 2)
+		close(data->pipe_fds[0]);
+	if (data->pipe_fds[1] > 2)
+		close(data->pipe_fds[1]);
 }
 
-void	clean_perror_exit(t_ppx *data, const char *msg, int exit_code)
+void	perror_clean_exit(t_ppx *data, const char *msg, int exit_code)
 {
-	cleanup_data(data);
 	perror(msg);
+	cleanup_data(data);
+	exit(exit_code);
+}
+
+void	clean_exit(t_ppx *d, const char *msg, const char *file, int exit_code)
+{
+	ft_putstr_fd("pipex: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	if (file)
+		ft_putstr_fd(file, STDERR_FILENO);
+	ft_putendl_fd("", STDERR_FILENO);
+	cleanup_data(d);
 	exit(exit_code);
 }
 
 /**
- * Attempts to find correct binary path and assign it
- */ 
+ * Splits binary into binary name and arguments, attempts to look for binary
+ * in PATH, if not found leaves binary name as is.
+ * If binary exists in the current directory or name already contains the path
+ * to a valid binary don't search PATH.
+ */
 void	assign_bin(t_ppx *data, int index, const char *bin_name)
 {
 	char	*bin;
@@ -51,13 +72,15 @@ void	assign_bin(t_ppx *data, int index, const char *bin_name)
 
 	data->bin[index] = ft_split(bin_name, ' ');
 	if (!data->bin[index])
-		clean_perror_exit(data, "pipex: assign_bin: ft_split", E_MALLOC);
+		clean_exit(data, "couldn't malloc in split", NULL, E_MALLOC);
+	if (access(data->bin[index][0], F_OK | X_OK) == 0)
+		return ;
 	i = -1;
 	while (data->path_split[++i])
 	{
 		bin = ft_strjoin(data->path_split[i], data->bin[index][0]);
 		if (!bin)
-			clean_perror_exit(data, "pipex: assign_bin: ft_strjoin", E_MALLOC);
+			clean_exit(data, "couldn't malloc in ft_strjoin", NULL, E_MALLOC);
 		if (access(bin, F_OK) == 0)
 		{
 			free(data->bin[index][0]);
@@ -68,106 +91,145 @@ void	assign_bin(t_ppx *data, int index, const char *bin_name)
 	}
 }
 
-int	main(int argc, char *argv[], char *envp[])
+/**
+ * Look for path variable, split path into parts and append '/' when necessary
+ * to make joining with binary names easier later
+ */
+void	prepare_path(t_ppx *d)
 {
-	static t_ppx	data;
-	char			*temp;
-	int				i;
+	int		i;
 
-	// Correct amount of args
-	if (argc != 5)
-		return(write_error_return_int(
-			"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>", 0));
-
-	// Initialization
-	data.argc = argc;
-	data.argv = argv;
-	data.envp = envp;
-
-	// Look for PATH in envp and assign to data
 	i = -1;
-	while (envp[++i])
-		if (ft_strnstr(envp[i], "PATH=", ft_strlen("PATH=")) == envp[i])
-			data.path = ft_strchr(envp[i], '=') + 1;
-
-	// Split PATH into parts
-	data.path_split = ft_split(data.path, ':');
-	if (!data.path_split)
-		clean_perror_exit(&data, "ft_split: ", E_MALLOC);
-
-	// Append '/' to paths when necessary to make it easier to join for
-	// searching if a binary exists
-	i = -1;
-	while (data.path_split[++i])
-	{
-		if (data.path_split[i][ft_strlen(data.path_split[i]) - 1] != '/')
+	while (d->envp[++i])
+		if (ft_strnstr(d->envp[i], "PATH=", ft_strlen("PATH=")) == d->envp[i])
 		{
-			temp = data.path_split[i];
-			data.path_split[i] = ft_strjoin(data.path_split[i], "/");
-			if (!data.path_split[i])
-				clean_perror_exit(&data, "ft_strjoin: ", E_MALLOC);
+			d->path = ft_strchr(d->envp[i], '=') + 1;
+			break ;
+		}
+	if (!d->path)
+		clean_exit(d, "couldn't find PATH", NULL, E_NOPATH);
+	d->path_split = ft_split(d->path, ':');
+	if (!d->path_split)
+		clean_exit(d, "couldn't malloc in ft_split", NULL, E_MALLOC);
+	append_slash_to_paths(d);
+}
+
+void	append_slash_to_paths(t_ppx *d)
+{
+	char	*temp;
+	int		i;
+
+	i = -1;
+	while (d->path_split[++i])
+	{
+		if (d->path_split[i][ft_strlen(d->path_split[i]) - 1] != '/')
+		{
+			temp = d->path_split[i];
+			d->path_split[i] = ft_strjoin(d->path_split[i], "/");
+			if (!d->path_split[i])
+				clean_exit(d, "couldn't malloc in ft_strjoin", NULL, E_MALLOC);
 			free(temp);
 		}
 	}
+}
 
-	assign_bin(&data, 0, argv[2]);
-	assign_bin(&data, 1, argv[3]);
-	ft_putendl(data.bin[0][0]);
-	ft_putendl(data.bin[1][0]);
+/**
+ * Read from the infile in the first process, redirect output to the pipe,
+ * attempt to run binary, check for errors, close all extra fds
+ */
+void	first_child(t_ppx *d)
+{
+	if (close(d->pipe_fds[0]))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	if (access(d->argv[1], F_OK))
+		clean_exit(d, "no such file or directory: ", d->argv[1], E_PERMISSION);
+	if (access(d->argv[1], R_OK))
+		clean_exit(d, "permission_denied: ", d->argv[1], E_PERMISSION);
+	d->file_fd = open(d->argv[1], O_RDONLY);
+	if (d->file_fd == -1)
+		perror_clean_exit(d, "pipex", E_OPEN);
+	if (dup2(d->file_fd, STDIN_FILENO) < 0)
+		perror_clean_exit(d, "pipex", E_DUP2);
+	if (close(d->file_fd))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	if (dup2(d->pipe_fds[1], STDOUT_FILENO) < 0)
+		perror_clean_exit(d, "pipex", E_DUP2);
+	if (close(d->pipe_fds[1]))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	if (access(d->bin[0][0], F_OK))
+		clean_exit(d, "command not found: ", d->argv[2], E_NOTFOUND);
+	if (access(d->bin[0][0], X_OK))
+		clean_exit(d, "permission denied: ", d->argv[2], E_PERMISSION);
+	execve(d->bin[0][0], d->bin[0], d->envp);
+	clean_exit(d, "command not found: ", d->argv[2], E_NOTFOUND);
+}
 
-	// Create pipe
-	if (pipe(data.pipe_fds))
-		clean_perror_exit(&data, "pipex: main", E_PIPE);
+/**
+ * Close write end of pipe (second child writes to outfile), attempt to open
+ * outfile, if this fails clean and exit, notify of permission error.
+ * Redirection of stdout to outfile, close file descriptor after redirection.
+ * Redirect stdin to read end of pipe, close pipe end after redirection.
+ * Try to verify if binary exists, if exists check if it has execute
+ * permissions.
+ */
+void	last_child(t_ppx *d)
+{
+	if (close(d->pipe_fds[1]))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	d->file_fd = open(d->argv[4], O_CREAT | O_WRONLY, 0777);
+	if (d->file_fd == -1)
+		clean_exit(d, "permission denied: ", d->argv[4], E_PERMISSION);
+	if (dup2(d->file_fd, STDOUT_FILENO) < 0)
+		perror_clean_exit(d, "pipex", E_DUP2);
+	if (close(d->file_fd))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	if (dup2(d->pipe_fds[0], STDIN_FILENO) < 0)
+		perror_clean_exit(d, "pipex", E_DUP2);
+	if (close(d->pipe_fds[0]))
+		perror_clean_exit(d, "pipex", E_CLOSE);
+	if (access(d->bin[1][0], F_OK))
+		clean_exit(d, "command not found: ", d->argv[3], E_NOTFOUND);
+	if (access(d->bin[1][0], X_OK))
+		clean_exit(d, "permission denied: ", d->argv[3], E_PERMISSION);
+	execve(d->bin[1][0], d->bin[1], d->envp);
+	clean_exit(d, "command not found: ", d->argv[3], E_NOTFOUND);
+}
 
-	// Fork two processes, one for each binary
-	data.pid[0] = fork();
-	if (data.pid[0] < 0)
-		clean_perror_exit(&data, "pipex: main", E_FORK);
+void	setup_data(t_ppx *data, int argc, char *argv[], char *envp[])
+{
+	data->argc = argc;
+	data->argv = argv;
+	data->envp = envp;
+	prepare_path(data);
+	assign_bin(data, 0, argv[2]);
+	assign_bin(data, 1, argv[3]);
+	if (pipe(data->pipe_fds))
+		perror_clean_exit(data, "pipex", E_PIPE);
+}
 
-	// Read from the infile in the first process, redirect output to the pipe,
-	// attempt to run binary, check for errors, close all extra fds
-	if (data.pid[0] == 0)
-	{
-		if (close(data.pipe_fds[0]))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		data.file_fd = open(argv[1], O_RDONLY);
-		if (data.file_fd == -1)
-			clean_perror_exit(&data, "pipex", E_OPEN);
-		if (dup2(data.file_fd, STDIN_FILENO) < 0)
-			clean_perror_exit(&data, "pipex", E_DUP2);
-		if (close(data.file_fd))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		if (dup2(data.pipe_fds[1], STDOUT_FILENO) < 0)
-			clean_perror_exit(&data, "pipex", E_DUP2);
-		if (close(data.pipe_fds[1]))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		execve(data.bin[0][0], data.bin[0], data.envp);
-		clean_perror_exit(&data, "pipex", E_EXEC);
-	}
-	data.pid[1] = fork();
-	if (data.pid[0] < 0)
-		write_error_return_int("pipex: error forking", E_FORK);
+void	handle_forks(t_ppx *data)
+{
+	data->pid[0] = fork();
+	if (data->pid[0] < 0)
+		perror_clean_exit(data, "pipex", E_FORK);
+	if (data->pid[0] == 0)
+		first_child(data);
+	data->pid[1] = fork();
+	if (data->pid[1] < 0)
+		perror_clean_exit(data, "pipex", E_FORK);
+	if (data->pid[1] == 0)
+		last_child(data);
+}
 
-	// Read from pipe in second process, redirect standard output to outfile,
-	// attempt to run binary, check for errors, close all extra fds
-	if (data.pid[1] == 0)
-	{
-		if (close(data.pipe_fds[1]))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		data.file_fd = open(argv[4], O_WRONLY);
-		if (data.file_fd == -1)
-			clean_perror_exit(&data, "pipex", E_OPEN);
-		if (dup2(data.pipe_fds[0], STDIN_FILENO) < 0)
-			write_error_return_int("pipex", E_DUP2);
-		if (dup2(data.file_fd, STDOUT_FILENO) < 0)
-			write_error_return_int("pipex", E_DUP2);
-		if (close(data.file_fd))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		if (close(data.pipe_fds[0]))
-			clean_perror_exit(&data, "pipex", E_CLOSE);
-		execve(data.bin[1][0], data.bin[1], data.envp);
-		clean_perror_exit(&data, "pipex", E_EXEC);
-	}
+int	main(int argc, char *argv[], char *envp[])
+{
+	static t_ppx	data;
+
+	if (argc != 5)
+		return (write_error_return_int(
+				"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>", 0));
+	setup_data(&data, argc, argv, envp);
+	handle_forks(&data);
 	close_fds(&data);
 	cleanup_data(&data);
 	waitpid(data.pid[0], &data.wait_status[0], 0);
