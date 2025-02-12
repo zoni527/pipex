@@ -20,10 +20,15 @@
 # define E_OPEN			5
 # define E_CLOSE		6
 # define E_EXEC			7
-# define E_MALLOC		8
+# define E_ALLOC		8
 # define E_ACCESS		9
 # define E_NOPATH		10
+# define E_INPUT		11
+# define E_UNLINK		12
 # define E_NOTFOUND		127
+
+# define READ	0
+# define WRITE	1
 
 # include "libft/libft.h"
 # include <stdio.h>
@@ -47,4 +52,39 @@ typedef struct s_ppx
 	int		file_fd;
 	int		pipe_fds[2];
 }	t_ppx;
+
+// pipex.c ---------------------------------------------------------------------
+void	validate_input(char *argv[]);
+void	prepare_path(t_ppx *d);
+void	append_slash_to_paths(t_ppx *d);
+// data_and_cleanup.c ----------------------------------------------------------
+void	setup_data(t_ppx *data, int argc, char *argv[], char *envp[]);
+void	cleanup_data(t_ppx *data);
+void	close_fds(t_ppx *data);
+void	perror_clean_exit(t_ppx *data, const char *msg, int exit_code);
+void	clean_exit(t_ppx *d, const char *msg, const char *file, int exit_code);
+// prepare_bins.c --------------------------------------------------------------
+void	prepare_bins(t_ppx *data);
+void	assign_bin(t_ppx *data, int index, const char *bin_name);
+void	search_for_bin(t_ppx *data, int index);
+// prepare_bins_utils.c --------------------------------------------------------
+void	replace_space_within_single_quotes_with_del(char *str);
+void	trim_single_quotes(t_ppx *data, char *arr[]);
+void	replace_del_with_space(char *arr[]);
+// forks_and_children.c --------------------------------------------------------
+void	handle_forks(t_ppx *data);
+void	first_child(t_ppx *d);
+void	last_child(t_ppx *d);
+// infile_and_outfile.c --------------------------------------------------------
+void	check_infile(t_ppx *d);
+void	open_infile(t_ppx *d);
+void	check_outfile(t_ppx *d);
+void	open_outfile(t_ppx *d);
+// pipes_redirection_and_bin_check.c -------------------------------------------
+void	close_pipe_write_end(t_ppx *d);
+void	close_pipe_read_end(t_ppx *d);
+void	redirect_stdout_and_close_fd(t_ppx *d, int fd);
+void	redirect_stdin_and_close_fd(t_ppx *d, int fd);
+void	check_bin(t_ppx *d, int index);
+//------------------------------------------------------------------------------
 #endif

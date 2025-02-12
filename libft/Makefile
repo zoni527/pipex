@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/07 15:58:04 by jvarila           #+#    #+#              #
-#    Updated: 2024/12/19 11:27:15 by jvarila          ###   ########.fr        #
+#    Created: 2025/02/11 11:09:00 by jvarila           #+#    #+#              #
+#    Updated: 2025/02/11 11:09:07 by jvarila          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,15 @@ NAME		:= libft.a
 
 CC		:= cc
 CFLAGS		:= -Wall -Wextra -Werror
-AR		:= ar -crs
 DEBUGFLAGS	:= -g
-
+AR		:= ar -crs
+#------------------------------------------------------------------------------#
+SRCDIR		:= ./
+INCDIR		:= ./
+OBJDIR		:= ./obj
+#------------------------------------------------------------------------------#
 HF		:= libft.h
-
+#------------------------------------------------------------------------------#
 SRC :=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c	ft_isascii.c	\
 	ft_isprint.c	ft_strlen.c	ft_memset.c	ft_bzero.c	\
 	ft_memcpy.c	ft_memmove.c	ft_strlcpy.c	ft_strlcat.c	\
@@ -53,27 +57,32 @@ SRC :=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c	ft_isascii.c	\
 	valid_multinumberstring.c	\
 	ft_islower.c	ft_isupper.c	\
 	contains_duplicate_char.c	char_index.c	\
-	valid_hex_string.c	atou_base.c	atohex.c
+	valid_hex_string.c	atou_base.c	atohex.c	\
+	count_char.c	replace_char.c
 
-
-OBJ	:= $(SRC:.c=.o)
-
+OBJ	:= $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
+#------------------------------------------------------------------------------#
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HF)
+$(NAME): $(OBJDIR) $(OBJ) $(HF)
 	$(AR) $(NAME) $(OBJ)
 
-%.o: %.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(HF)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+#------------------------------------------------------------------------------#
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJDIR)
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
+#------------------------------------------------------------------------------#
 debug: CFLAGS += $(DEBUGFLAGS)
 debug: re
-
+#------------------------------------------------------------------------------#
 .PHONY: clean fclean re debug
+#------------------------------------------------------------------------------#

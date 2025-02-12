@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_split.c                                       :+:      :+:    :+:   */
+/*   replace_char.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 11:49:57 by jvarila           #+#    #+#             */
-/*   Updated: 2025/01/30 11:52:27 by jvarila          ###   ########.fr       */
+/*   Created: 2025/02/12 09:38:41 by jvarila           #+#    #+#             */
+/*   Updated: 2025/02/12 09:40:32 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_split(char ***words_ptr)
+void	replace_char(char *str, int c1, int c2)
 {
-	char	**words;
-
-	words = *words_ptr;
-	if (!words)
-		return ;
-	while (*words)
-		free(*(words++));
-	free(*words_ptr);
-	*words_ptr = NULL;
+	while (*str)
+	{
+		if (*str == c1)
+			*str = c2;
+		str++;
+	}
 }

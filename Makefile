@@ -13,15 +13,16 @@
 NAME		:= pipex
 
 CC		:= cc
-DEBUGFLAGS	:= -g
 CFLAGS		:= -Wall -Wextra -Werror
+DEBUGFLAGS	:= -g
 #------------------------------------------------------------------------------#
 SRCDIR		:= ./
 INCDIR		:= ./
 OBJDIR		:= ./obj
 LIBFTDIR	:= ./libft
 #------------------------------------------------------------------------------#
-SRC	:=	pipex.c
+SRC	:=	pipex.c			\
+		prepare_bins.c
 
 OBJ		:= $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 #------------------------------------------------------------------------------#

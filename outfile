@@ -1,18 +1,1 @@
-#    Makefile                                           :+:      :+:    :+:    #
-#    By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+         #
-#    Created: 2024/11/07 15:58:04 by jvarila           #+#    #+#              #
-#    Updated: 2025/02/09 10:50:30 by jvarila          ###   ########.fr        #
-CFLAGS		:= -Wall -Wextra -Werror
-OBJ		:= $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
-BOBJ	:= $(addprefix $(BOBJDIR)/, $(BSRC:.c=.o))
-LIBFT		:= $(LIBFTDIR)/libft.a
-all: $(NAME)
-	make all -C $(LIBFTDIR)
-clean:
-	make clean -C $(LIBFTDIR)
-fclean: clean
-	make fclean -C $(LIBFTDIR)
-re: fclean all
-debug: fclean libftdebug all
-	make debug -C $(LIBFTDIR)
-.PHONY: all clean fclean re phony debug libftdebug bonus
+I am the infile

@@ -89,7 +89,7 @@ int				ft_putchar_fd(char c, int fd);
 int				ft_putstr_fd(const char *s, int fd);
 int				ft_putendl_fd(const char *s, int fd);
 int				ft_putnbr_fd(int n, int fd);
-
+// bonus -----------------------------------------------------------------------
 typedef struct s_list
 {
 	void			*content;
@@ -106,32 +106,7 @@ void			ft_lstclear(t_list **lst, void (*del)(void *));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
 					void (*del)(void *));
-
-int				ft_putstr(const char *s);
-int				ft_putchar(char c);
-int				ft_putendl(const char *s);
-int				ft_putnbr(int n);
-int				ft_putnbr_base(unsigned int n, const char *base);
-
-char			*ft_longtoa(long int n);
-char			*ft_hextoa(unsigned long n, unsigned char mode);
-char			*ft_utoa(unsigned int n);
-char			*ft_ulongtoa(unsigned long n);
-
-int				ft_int_digits(int n);
-int				ft_long_digits(long int n);
-int				ft_uint_digits(unsigned int n);
-int				ft_ulong_digits(unsigned long n);
-int				ft_ulong_hex_digits(unsigned long n);
-
-int				free_ptr_return_int(void **ptr_to_ptr, int i);
-void			free_split(char ***words_ptr);
-int				write_error_return_int(char *error_message, int return_value);
-void			*write_error_return_null(char *error_message);
-
-//------------------------------------------------------------------------------
-// get_next_line
-
+// get_next_line----------------------------------------------------------------
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
 # endif
@@ -153,9 +128,7 @@ char			*get_next_line(int fd);
 size_t			ft_strlen(const char *str);
 void			*ft_memmove(void *dest, const void *src, size_t n);
 char			*strjoin_and_free(char *s1, char *s2);
-//------------------------------------------------------------------------------
-// ft_printf
-
+// ft_printf--------------------------------------------------------------------
 int				ft_printf(const char *format_str, ...);
 int				handle_c(const char **format_str_ptr, va_list ap);
 int				handle_s(const char **format_str_ptr, va_list ap);
@@ -166,7 +139,27 @@ int				handle_u(const char **format_str_ptr, va_list ap);
 int				handle_hex_lowercase(const char **format_str_ptr, va_list ap);
 int				handle_hex_uppercase(const char **format_str_ptr, va_list ap);
 //------------------------------------------------------------------------------
+int				ft_putstr(const char *s);
+int				ft_putchar(char c);
+int				ft_putendl(const char *s);
+int				ft_putnbr(int n);
+int				ft_putnbr_base(unsigned int n, const char *base);
 
+char			*ft_longtoa(long int n);
+char			*ft_hextoa(unsigned long n, unsigned char mode);
+char			*ft_utoa(unsigned int n);
+char			*ft_ulongtoa(unsigned long n);
+
+int				ft_int_digits(int n);
+int				ft_long_digits(long int n);
+int				ft_uint_digits(unsigned int n);
+int				ft_ulong_digits(unsigned long n);
+int				ft_ulong_hex_digits(unsigned long n);
+
+int				free_ptr_return_int(void **ptr_to_ptr, int i);
+void			free_split(char ***words_ptr);
+int				write_error_return_int(char *error_message, int return_value);
+void			*write_error_return_null(char *error_message);
 int				isnumstr(const char *str);
 int				word_count(const char *str);
 char			*skip_whitespace(const char *str);
@@ -189,5 +182,8 @@ int				char_index(const char *str, int c);
 int				valid_hex_string(const char *str);
 unsigned int	atou_base(const char *str, const char *base);
 unsigned int	atohex(const char *str);
+
+int				count_char(const char *str, int c);
+void			replace_char(char *str, int c1, int c2);
 
 #endif
