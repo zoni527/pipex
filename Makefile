@@ -21,8 +21,13 @@ INCDIR		:= ./
 OBJDIR		:= ./obj
 LIBFTDIR	:= ./libft
 #------------------------------------------------------------------------------#
-SRC	:=	pipex.c			\
-		prepare_bins.c
+SRC	:=	pipex.c					\
+		data_setup_cleanup_and_errors.c		\
+		prepare_bins.c				\
+		prepare_bins_utils.c			\
+		forks_and_children.c			\
+		infile_and_outfile.c			\
+		pipe_redirection_and_bin_check.c
 
 OBJ		:= $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 #------------------------------------------------------------------------------#

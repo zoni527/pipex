@@ -54,10 +54,11 @@ typedef struct s_ppx
 }	t_ppx;
 
 // pipex.c ---------------------------------------------------------------------
+int		main(int argc, char *argv[], char *envp[]);
 void	validate_input(char *argv[]);
 void	prepare_path(t_ppx *d);
 void	append_slash_to_paths(t_ppx *d);
-// data_and_cleanup.c ----------------------------------------------------------
+// data_setup_cleanup_and_errors.c ---------------------------------------------
 void	setup_data(t_ppx *data, int argc, char *argv[], char *envp[]);
 void	cleanup_data(t_ppx *data);
 void	close_fds(t_ppx *data);
@@ -65,11 +66,11 @@ void	perror_clean_exit(t_ppx *data, const char *msg, int exit_code);
 void	clean_exit(t_ppx *d, const char *msg, const char *file, int exit_code);
 // prepare_bins.c --------------------------------------------------------------
 void	prepare_bins(t_ppx *data);
-void	assign_bin(t_ppx *data, int index, const char *bin_name);
-void	search_for_bin(t_ppx *data, int index);
+void	assign_bin(t_ppx *data, int index, char *bin_name);
+void	search_for_bin(t_ppx *data, int index, char *bin_name);
 // prepare_bins_utils.c --------------------------------------------------------
 void	replace_space_within_single_quotes_with_del(char *str);
-void	trim_single_quotes(t_ppx *data, char *arr[]);
+void	trim_single_quotes(t_ppx *data, char *arr[], char *str);
 void	replace_del_with_space(char *arr[]);
 // forks_and_children.c --------------------------------------------------------
 void	handle_forks(t_ppx *data);
@@ -80,7 +81,7 @@ void	check_infile(t_ppx *d);
 void	open_infile(t_ppx *d);
 void	check_outfile(t_ppx *d);
 void	open_outfile(t_ppx *d);
-// pipes_redirection_and_bin_check.c -------------------------------------------
+// pipe_redirection_and_bin_check.c --------------------------------------------
 void	close_pipe_write_end(t_ppx *d);
 void	close_pipe_read_end(t_ppx *d);
 void	redirect_stdout_and_close_fd(t_ppx *d, int fd);
