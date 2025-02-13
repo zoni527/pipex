@@ -64,7 +64,7 @@ void	assign_bin(t_ppx *data, int index, char *bin_name)
 		free((void *)bin_name);
 		clean_exit(data, "couldn't alloc in split", NULL, E_ALLOC);
 	}
-	if (access(data->bin[index][0], F_OK | X_OK) == 0)
+	if (ft_strchr(data->bin[index][0], '/'))
 		return ;
 	search_for_bin(data, index, bin_name);
 }
