@@ -42,7 +42,7 @@ void	prepare_bins(t_ppx *data)
  */
 void	assign_bin(t_ppx *data, int index, char *bin_name)
 {
-	if (!*bin_name)
+	if (!word_count(bin_name))
 	{
 		data->bin[index] = ft_calloc(2, sizeof(char *));
 		if (!data->bin[index])

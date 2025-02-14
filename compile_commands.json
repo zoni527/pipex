@@ -1,0 +1,128 @@
+[
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "pipex.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/pipex.o"
+  ],
+  "file": "pipex.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "data_setup_cleanup_and_errors.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/data_setup_cleanup_and_errors.o"
+  ],
+  "file": "data_setup_cleanup_and_errors.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "prepare_bins.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/prepare_bins.o"
+  ],
+  "file": "prepare_bins.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "prepare_bins_utils.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/prepare_bins_utils.o"
+  ],
+  "file": "prepare_bins_utils.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "forks_and_children.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/forks_and_children.o"
+  ],
+  "file": "forks_and_children.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "infile_and_outfile.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/infile_and_outfile.o"
+  ],
+  "file": "infile_and_outfile.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/pipex",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-c",
+   "pipe_redirection_and_bin_check.c",
+   "-I",
+   "./libft",
+   "-I",
+   "./",
+   "-o",
+   "obj/pipe_redirection_and_bin_check.o"
+  ],
+  "file": "pipe_redirection_and_bin_check.c"
+ }
+]
