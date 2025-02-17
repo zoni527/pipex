@@ -16,12 +16,12 @@ void	handle_forks(t_ppx *data)
 {
 	data->pid[0] = fork();
 	if (data->pid[0] < 0)
-		perror_clean_exit(data, "pipex", E_FORK);
+		perror_clean_exit(data, M_PIPEX, E_FORK);
 	if (data->pid[0] == 0)
 		first_child(data);
 	data->pid[1] = fork();
 	if (data->pid[1] < 0)
-		perror_clean_exit(data, "pipex", E_FORK);
+		perror_clean_exit(data, M_PIPEX, E_FORK);
 	if (data->pid[1] == 0)
 		last_child(data);
 }
@@ -39,7 +39,7 @@ void	first_child(t_ppx *d)
 	redirect_stdout_and_close_fd(d, d->pipe_fds[WRITE]);
 	check_bin(d, 0);
 	execve(d->bin[0][0], d->bin[0], d->envp);
-	clean_exit(d, "command not found: ", d->argv[2], E_NOTFOUND);
+	clean_exit(d, M_NOTFOUND, d->argv[2], E_NOTFOUND);
 }
 
 /**
@@ -59,5 +59,5 @@ void	last_child(t_ppx *d)
 	redirect_stdin_and_close_fd(d, d->pipe_fds[READ]);
 	check_bin(d, 1);
 	execve(d->bin[1][0], d->bin[1], d->envp);
-	clean_exit(d, "command not found: ", d->argv[3], E_NOTFOUND);
+	clean_exit(d, M_NOTFOUND, d->argv[3], E_NOTFOUND);
 }

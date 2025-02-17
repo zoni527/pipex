@@ -59,7 +59,7 @@ void	trim_single_quotes(t_ppx *d, char *arr[], char *str)
 			{
 				free(str);
 				free(temp);
-				clean_exit(d, "couldn't alloc in ft_strtrim", NULL, E_ALLOC);
+				clean_exit(d, M_ALLOC_TRIM, NULL, E_ALLOC);
 			}
 			free(temp);
 		}

@@ -29,6 +29,24 @@
 # define E_INPUT		11
 # define E_UNLINK		12
 
+# define M_ARGS			"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>"
+# define M_QUOTES		"pipex: invalid amount of quotes in input"
+# define M_NOPATH		"couldn't find PATH"
+
+# define M_ALLOC_SPLIT	"couldn't alloc in ft_split"
+# define M_ALLOC_JOIN	"couldn't alloc in ft_strjoin"
+# define M_ALLOC_TRIM	"couldn't alloc in ft_strtrim"
+# define M_ALLOC_DUP	"couldn't alloc in ft_strdup"
+# define M_ALLOC_ABIN	"couldn't alloc in assign_bin"
+
+# define M_NOSUCH		"no such file or directory: "
+# define M_PERM			"permission denied: "
+# define M_ISDIR		"is a directory: "
+# define M_OPEN			"failed to open file: "
+# define M_NOTFOUND		"command not found: "
+
+# define M_PIPEX		"pipex"
+
 # define READ	0
 # define WRITE	1
 

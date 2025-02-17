@@ -18,7 +18,7 @@ void	prepare_bins(t_ppx *data)
 
 	str = ft_strdup(data->argv[2]);
 	if (!str)
-		clean_exit(data, "couldn't malloc in ft_strdup", NULL, E_ALLOC);
+		clean_exit(data, M_ALLOC_DUP, NULL, E_ALLOC);
 	replace_space_within_single_quotes_with_del(str);
 	assign_bin(data, 0, str);
 	trim_single_quotes(data, data->bin[0], str);
@@ -26,7 +26,7 @@ void	prepare_bins(t_ppx *data)
 	free(str);
 	str = ft_strdup(data->argv[3]);
 	if (!str)
-		clean_exit(data, "couldn't malloc in ft_strdup", NULL, E_ALLOC);
+		clean_exit(data, M_ALLOC_DUP, NULL, E_ALLOC);
 	replace_space_within_single_quotes_with_del(str);
 	assign_bin(data, 1, str);
 	trim_single_quotes(data, data->bin[1], str);
@@ -48,13 +48,13 @@ void	assign_bin(t_ppx *data, int index, char *bin_name)
 		if (!data->bin[index])
 		{
 			free(bin_name);
-			clean_exit(data, "couldn't calloc in assign_bin", NULL, E_ALLOC);
+			clean_exit(data, M_ALLOC_ABIN, NULL, E_ALLOC);
 		}
 		data->bin[index][0] = ft_strdup("");
 		if (!data->bin[index][0])
 		{
 			free(bin_name);
-			clean_exit(data, "couldn't alloc in ft_strdup", NULL, E_ALLOC);
+			clean_exit(data, M_ALLOC_DUP, NULL, E_ALLOC);
 		}
 		return ;
 	}
@@ -62,7 +62,7 @@ void	assign_bin(t_ppx *data, int index, char *bin_name)
 	if (!data->bin[index])
 	{
 		free((void *)bin_name);
-		clean_exit(data, "couldn't alloc in split", NULL, E_ALLOC);
+		clean_exit(data, M_ALLOC_SPLIT, NULL, E_ALLOC);
 	}
 	if (ft_strchr(data->bin[index][0], '/'))
 		return ;
@@ -84,7 +84,7 @@ void	search_for_bin(t_ppx *data, int index, char *bin_name)
 		{
 			free(bin);
 			free(bin_name);
-			clean_exit(data, "couldn't alloc in ft_strjoin", NULL, E_ALLOC);
+			clean_exit(data, M_ALLOC_JOIN, NULL, E_ALLOC);
 		}
 		if (access(bin, F_OK) == 0)
 		{

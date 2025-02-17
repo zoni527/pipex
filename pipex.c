@@ -12,14 +12,12 @@
 
 #include "pipex.h"
 
-#define INPUT_MSG	"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>"
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	static t_ppx	data;
 
 	if (argc != 5)
-		return (write_error_return_int(INPUT_MSG, 0));
+		return (write_error_return_int(M_ARGS, E_INPUT));
 	validate_input(argv);
 	setup_data(&data, argc, argv, envp);
 	handle_forks(&data);
@@ -42,8 +40,7 @@ void	validate_input(char *argv[])
 		if (count_char(*argv, '\'') % 2 != 0
 			|| count_char(*argv, '\"') % 2 != 0)
 		{
-			ft_putendl_fd("pipex: invalid amount of quotes in input",
-				STDERR_FILENO);
+			ft_putendl_fd(M_QUOTES, STDERR_FILENO);
 			exit (E_INPUT);
 		}
 		argv++;
@@ -68,10 +65,10 @@ void	prepare_path(t_ppx *d)
 		}
 	}
 	if (!d->path)
-		clean_exit(d, "couldn't find PATH", NULL, E_NOPATH);
+		clean_exit(d, M_NOPATH, NULL, E_NOPATH);
 	d->path_split = ft_split(d->path, ':');
 	if (!d->path_split)
-		clean_exit(d, "couldn't malloc in ft_split", NULL, E_ALLOC);
+		clean_exit(d, M_ALLOC_SPLIT, NULL, E_ALLOC);
 	append_slash_to_paths(d);
 }
 
@@ -95,7 +92,7 @@ void	append_slash_to_paths(t_ppx *d)
 				free(temp);
 				while (d->path_split[++i])
 					free(d->path_split[i]);
-				clean_exit(d, "couldn't malloc in ft_strjoin", NULL, E_ALLOC);
+				clean_exit(d, M_ALLOC_JOIN, NULL, E_ALLOC);
 			}
 			free(temp);
 		}
