@@ -50,12 +50,12 @@ void	check_bin(t_ppx *d, int index)
 		clean_exit(d, "no such file or directory: ",
 			d->bin[index][0], E_NOTFOUND);
 	if (access(d->bin[index][0], X_OK))
-		clean_exit(d, "permission denied: ", d->argv[index + 2], E_PERMISSION);
+		clean_exit(d, "permission denied: ", d->argv[index + 2], E_BINPERM);
 	fd = open(d->bin[index][0], O_DIRECTORY);
 	if (fd != -1)
 	{
 		if (close(fd))
 			clean_exit(d, "close failed in check_bin", NULL, E_CLOSE);
-		clean_exit(d, "permission denied: ", d->argv[index + 2], E_PERMISSION);
+		clean_exit(d, "permission denied: ", d->argv[index + 2], E_BINPERM);
 	}
 }

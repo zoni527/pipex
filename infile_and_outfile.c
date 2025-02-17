@@ -15,9 +15,9 @@
 void	check_infile(t_ppx *d)
 {
 	if (access(d->infile, F_OK))
-		clean_exit(d, "no such file or directory: ", d->infile, E_PERMISSION);
+		clean_exit(d, "no such file or directory: ", d->infile, E_FILEPERM);
 	if (access(d->infile, R_OK))
-		clean_exit(d, "permission_denied: ", d->infile, E_PERMISSION);
+		clean_exit(d, "permission denied: ", d->infile, E_FILEPERM);
 }
 
 void	open_infile(t_ppx *d)
@@ -26,7 +26,7 @@ void	open_infile(t_ppx *d)
 	if (d->file_fd == -1)
 	{
 		if (errno == EISDIR)
-			clean_exit(d, "is a directory: ", d->infile, E_PERMISSION);
+			clean_exit(d, "is a directory: ", d->infile, E_FILEPERM);
 		else
 			clean_exit(d, "failed to open file: ", d->infile, E_OPEN);
 	}
@@ -35,11 +35,11 @@ void	open_infile(t_ppx *d)
 void	check_outfile(t_ppx *d)
 {
 	if (!d->outfile[0])
-		clean_exit(d, "no such file or directory: ", d->outfile, E_PERMISSION);
+		clean_exit(d, "no such file or directory: ", d->outfile, E_FILEPERM);
 	if (access(d->outfile, F_OK) == 0)
 	{
 		if (access(d->outfile, W_OK))
-			clean_exit(d, "permission denied: ", d->outfile, E_PERMISSION);
+			clean_exit(d, "permission denied: ", d->outfile, E_FILEPERM);
 	}
 }
 
@@ -49,7 +49,7 @@ void	open_outfile(t_ppx *d)
 	if (d->file_fd == -1)
 	{
 		if (errno == EISDIR)
-			clean_exit(d, "is a directory: ", d->outfile, E_PERMISSION);
+			clean_exit(d, "is a directory: ", d->outfile, E_FILEPERM);
 		else
 			clean_exit(d, "failed to open file: ", d->outfile, E_OPEN);
 	}

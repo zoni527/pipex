@@ -11,28 +11,23 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "libft/libft.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
+
+#define INPUT_MSG	"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>"
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	static t_ppx	data;
 
 	if (argc != 5)
-		return (write_error_return_int(
-				"Example use: ./pipex <file1> <cmd1> <cmd2> <file2>", 0));
+		return (write_error_return_int(INPUT_MSG, 0));
 	validate_input(argv);
 	setup_data(&data, argc, argv, envp);
 	handle_forks(&data);
 	cleanup_data(&data);
-	waitpid(data.pid[0], &data.wait_status[0], 0);
-	waitpid(data.pid[1], &data.wait_status[1], 0);
-	if (data.wait_status[1] == 32512)
-		return (E_NOTFOUND);
-	if (data.wait_status[1] == 256)
-		return (E_PERMISSION);
+	waitpid(data.pid[0], NULL, 0);
+	waitpid(data.pid[1], &data.wait_status, 0);
+	if (WIFEXITED(data.wait_status))
+		return (WEXITSTATUS(data.wait_status));
 	return (EXIT_SUCCESS);
 }
 

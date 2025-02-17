@@ -13,7 +13,10 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# define E_PERMISSION	1
+# define E_FILEPERM		1
+# define E_BINPERM		126
+# define E_NOTFOUND		127
+
 # define E_PIPE			2
 # define E_FORK			3
 # define E_DUP2			4
@@ -25,7 +28,6 @@
 # define E_NOPATH		10
 # define E_INPUT		11
 # define E_UNLINK		12
-# define E_NOTFOUND		127
 
 # define READ	0
 # define WRITE	1
@@ -47,7 +49,7 @@ typedef struct s_ppx
 	char	**path_split;
 	char	**bin[2];
 	char	*args[2];
-	int		wait_status[2];
+	int		wait_status;
 	pid_t	pid[2];
 	int		file_fd;
 	int		pipe_fds[2];
