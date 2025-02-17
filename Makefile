@@ -31,14 +31,6 @@ SRC	:=	pipex.c					\
 
 OBJ		:= $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 #------------------------------------------------------------------------------#
-BNAME		:= pipex_bonus
-BSRCDIR		:= ./
-BOBJDIR		:= ./obj_bonus
-
-BSRC :=	pipex_bonus.c
-
-BOBJ	:= $(addprefix $(BOBJDIR)/, $(BSRC:.c=.o))
-#------------------------------------------------------------------------------#
 LIBFT		:= $(LIBFTDIR)/libft.a
 LIBFTH		:= $(LIBFTDIR)/libft.h
 PPXH		:= $(INCDIR)/pipex.h
@@ -61,25 +53,12 @@ $(LIBFT):
 clean:
 	make clean -C $(LIBFTDIR)
 	rm -rf $(OBJDIR)
-	rm -rf $(BOBJDIR)
 
 fclean: clean
 	make fclean -C $(LIBFTDIR)
 	rm -f $(NAME)
-	rm -f $(BNAME)
 
 re: fclean all
-#------------------------------------------------------------------------------#
-bonus: $(BNAME)
-
-$(BNAME): $(BOBJDIR) $(BOBJ) $(LIBFT) $(LIBFTH) $(PPXH)
-	$(CC) $(CFLAGS) $(BOBJ) $(LIBFT) $(INC) -o $@
-
-$(BOBJDIR)/%.o: $(BSRCDIR)/%.c $(PPXH)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
-
-$(BOBJDIR):
-	mkdir -p $(BOBJDIR)
 #------------------------------------------------------------------------------#
 debug: CFLAGS += $(DEBUGFLAGS)
 debug: fclean libftdebug all
@@ -87,5 +66,5 @@ debug: fclean libftdebug all
 libftdebug:
 	make debug -C $(LIBFTDIR)
 #------------------------------------------------------------------------------#
-.PHONY: all clean fclean re phony debug libftdebug bonus
+.PHONY: all clean fclean re debug libftdebug
 #------------------------------------------------------------------------------#
